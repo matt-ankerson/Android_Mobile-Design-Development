@@ -1,0 +1,28 @@
+// Author: Matt Ankerson
+// Date: 10 April 2015
+
+package bit.ankem1.WebServices;
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+
+// This class in an extension of ArrayAdapter who's purpose is to
+// return a layout with two TextViews
+public class ArtistInfoArrayAdapter extends ArrayAdapter<ArtistInfo>
+{
+
+	public ArtistInfoArrayAdapter(Context context, int resource, ArtistInfo[] objects) 
+	{
+		super(context, resource, objects);
+	}
+
+	// Override the getView method
+	@Override
+	public View getView(int position, View convertView, ViewGroup container)
+	{
+		
+	}
+
+}

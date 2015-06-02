@@ -1,0 +1,19 @@
+package bit.ankem1.WebServices;
+
+public class ArtistInfo 
+{
+	public String artistName;
+	public String artistListeners;
+
+	public ArtistInfo(String artistName, String artistListeners) 
+	{
+		this.artistName = artistName;
+		this.artistListeners = artistListeners;
+	}
+	
+	public ArtistInfo(String artistName) 
+	{
+		this.artistName = artistName;
+	}
+
+}

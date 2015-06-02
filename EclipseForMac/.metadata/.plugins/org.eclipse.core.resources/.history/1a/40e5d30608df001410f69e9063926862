@@ -1,0 +1,9 @@
+package bit.ankem1.WebServices;
+
+public class ArtistInfoArrayAdapter {
+
+	public ArtistInfoArrayAdapter() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

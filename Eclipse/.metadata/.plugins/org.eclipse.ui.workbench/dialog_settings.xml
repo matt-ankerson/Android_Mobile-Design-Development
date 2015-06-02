@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.internal.QuickAccess">
+		<item value="1152" key="dialogWidth"/>
+		<item value="602" key="dialogHeight"/>
+		<list key="orderedProviders">
+			<item value="org.eclipse.ui.commands"/>
+			<item value="org.eclipse.ui.commands"/>
+			<item value="org.eclipse.e4.ui.parts"/>
+		</list>
+		<list key="textArray">
+			<item value="install"/>
+			<item value="install soft"/>
+			<item value="package "/>
+		</list>
+		<list key="orderedElements">
+			<item value="org.eclipse.equinox.p2.ui.sdk.install"/>
+			<item value="org.eclipse.ui.file.import(importWizardId=org.eclipse.equinox.p2.replication.import)"/>
+			<item value="org.eclipse.jdt.ui.PackageExplorer"/>
+		</list>
+		<list key="textEntries">
+			<item value="1"/>
+			<item value="1"/>
+			<item value="1"/>
+		</list>
+	</section>
+	<section name="WorkbenchPreferenceDialogSettings">
+		<item value="54" key="DIALOG_Y_ORIGIN"/>
+		<item value="250" key="DIALOG_X_ORIGIN"/>
+	</section>
+</section>

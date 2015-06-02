@@ -1,0 +1,9 @@
+package bit.ankem1.WebServices;
+
+public class ArtistInfo {
+
+	public ArtistInfo() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

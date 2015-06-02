@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:screenOrientation="landscape"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:id="@+id/llFragments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		android:layout_marginLeft="50dp"
+		android:layout_marginRight="50dp"
+        android:orientation="horizontal">
+        
+        <LinearLayout
+            android:id="@+id/fragmentImageContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+    	</LinearLayout>
+    
+    	<LinearLayout
+            android:id="@+id/fragmentListContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+    	</LinearLayout>
+        
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginBottom="50dp" >
+        
+        <Button
+        android:id="@+id/btnShowListFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show List" />
+
+    	<Button
+        android:id="@+id/btnShowImageFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Image" />
+    
+    </LinearLayout>
+
+</RelativeLayout>

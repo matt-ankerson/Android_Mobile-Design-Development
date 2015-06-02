@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Items">
+        <item>Ray Charles</item>
+        <item>Led Zepplin</item>
+        <item>Dire Straits</item>
+        <item>Metallica</item>
+        <item>Australian Crawl</item>
+    </string-array>
+    
+</resources>

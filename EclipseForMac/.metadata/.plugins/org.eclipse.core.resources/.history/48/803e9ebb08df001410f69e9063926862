@@ -1,0 +1,148 @@
+// Author: Matt Ankerson
+// Date: 10 April 2015
+// This Activity gets JSON data from Last.fm and presents a list of the top artists
+
+package bit.ankem1.WebServices;
+
+import android.app.Activity;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class WebServicesActivity extends Activity 
+{
+	// Class members
+	ListView lvArtists;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_web_services);
+		
+		
+	}
+	
+	public class JSONFetcher extends AsyncTask<Void, Void, String>
+	{
+		// Return a String to pass into onPostExecute
+		// This method handles the HttpURLConnection, response code, and input stream
+		@Override
+		protected String doInBackground(Void... params) 
+		{
+			// Declare our JSON text
+			String JSONString = "";
+			
+			// Any HTTP connection related code must be in a try/catch
+			try
+			{
+				// Declare the URL string (it would be better to dynamically create this.)
+				String urlString = "http://ws.audioscrobbler.com/2.0/?" + 
+								   "method=chart.getTopArtists" + 
+								   "&api_key=58384a2141a4b9737eacb9d0989b8a8c&limit=20&format=json";
+				
+				// Convert the URL string to URLObject
+				URL urlObject = new URL(urlString);
+				
+				// Create an HttpURLConnection object using urlObject's openConnection command.
+				HttpURLConnection connection = (HttpURLConnection) urlObject.openConnection();
+				
+				// Send the URL
+				connection.connect();
+				
+				// Get the response code, proceed only if it's 200
+				int responseCode = connection.getResponseCode();
+				
+				if(responseCode == 200)
+				{
+					// Get an InputStream from our HttpURLConnection object and set up a BufferedReader
+					InputStream inputStream = connection.getInputStream();
+					InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+					BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+					
+					// Read the entire input
+					String responseString;
+					StringBuilder stringBuilder = new StringBuilder();
+					
+					// Loop until the end of the input
+					while ((responseString = bufferedReader.readLine()) != null)
+					{
+						// Append the line
+						stringBuilder = stringBuilder.append(responseString);
+					}
+					
+					// Get the string from the stringBuilder
+					JSONString = stringBuilder.toString();
+					
+				}
+				else
+				{
+					// Something went wrong
+					Toast.makeText(WebServicesActivity.this, "Error! Response code: " + responseCode, Toast.LENGTH_LONG).show();
+				}
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+			}
+			
+			return JSONString;
+		}
+		
+		// Accepts the fetched string of data
+		// Parse the string and extract the data we want.
+		// Fire the data off to a ListView.
+		@Override
+		protected void onPostExecute(String fetchedString)
+		{
+			try 
+			{
+				// Create the JSONObject using the fetched string.
+				JSONObject artistData = new JSONObject(fetchedString);
+				
+				// Declare a Dictionary that we can use to store the artist name and listener count
+				Map<String, String> artistDictionary = new HashMap<String, String>();
+				
+				
+			} 
+			catch (JSONException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.web_services, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.util.Random"/>
+<fullyQualifiedTypeName name="android.R.string"/>
+<fullyQualifiedTypeName name="android.content.res.Resources"/>
+<fullyQualifiedTypeName name="bit.ankem1.firstAndoidApp.R.array"/>
+<fullyQualifiedTypeName name="bit.ankem1.firstAndoidApp.R.id"/>
+<fullyQualifiedTypeName name="java.lang.Integer"/>
+<fullyQualifiedTypeName name="android.widget.Toast"/>
+<fullyQualifiedTypeName name="android.view.View.OnClickListener"/>
+<fullyQualifiedTypeName name="android.view.View.OnLongClickListener"/>
+<fullyQualifiedTypeName name="bit.ankem1.ankem1ButtonClickEvents.R.id"/>
+<fullyQualifiedTypeName name="android.widget.Button"/>
+<fullyQualifiedTypeName name="bit.ankem1.EditText.R.id"/>
+<fullyQualifiedTypeName name="android.widget.EditText"/>
+<fullyQualifiedTypeName name="bit.ankem1.KeyEventsOnEditText.R.id"/>
+<fullyQualifiedTypeName name="android.view.View.OnKeyListener"/>
+<fullyQualifiedTypeName name="bit.ankem1.UsernameApp.R.id"/>
+</qualifiedTypeNameHistroy>

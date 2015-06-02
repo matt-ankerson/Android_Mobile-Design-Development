@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;activity_question_screen.xml&apos; to &apos;layout&apos;&#x0A;- Original project: &apos;ankem1LanguageTrainer&apos;&#x0A;- Destination element: &apos;layout&apos;&#x0A;- Original element: &apos;activity_question_screen.xml&apos;" description="Copy file" element1="res/layout/activity_question_screen.xml" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1425870217633" target="/ankem1ActivitiesAndIntentsOne/res/layout" units="0" version="1.0"/>
+</session>

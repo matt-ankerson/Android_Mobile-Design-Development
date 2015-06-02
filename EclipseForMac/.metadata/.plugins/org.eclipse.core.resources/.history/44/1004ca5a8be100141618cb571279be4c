@@ -1,0 +1,277 @@
+// Author: Matt Ankerson
+// Date: 10 April 2015
+// This Activity gets JSON data from Last.fm and presents a list of the top artists
+
+package bit.ankem1.WebServices;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class WebServicesActivity extends Activity 
+{
+	// Class members
+	ListView lvArtists;
+	Button btnFillList;
+	EditText txtArtist;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_web_services);
+		
+		lvArtists = (ListView)findViewById(R.id.lvArtists);
+		txtArtist = (EditText)findViewById(R.id.txtArtist);
+		
+		// Wire up the event handler for the button
+		btnFillList = (Button)findViewById(R.id.btnFillList);
+		ButtonHandler handler = new ButtonHandler();
+		btnFillList.setOnClickListener(handler);
+	}
+	
+	// Inner class for handling the button click event
+	public class ButtonHandler implements OnClickListener
+	{
+
+		// Event handling code goes here
+		@Override
+		public void onClick(View v) 
+		{
+			// Get the artist name from 'txtArtist', continue only if it's populated.
+			String artist = txtArtist.getText().toString();
+			
+			if((artist == null) || (artist == ""))
+			{
+				// The user left the field blank.
+				Toast.makeText(WebServicesActivity.this, "Please enter an artist.", Toast.LENGTH_LONG).show();
+			}
+			else
+			{
+				// Make an instance of the JSONFetcher class and call .execute
+				// Pass in our artist's name.
+				JSONFetcher fetcher = new JSONFetcher();
+				fetcher.execute();
+			}
+		}
+	}
+	
+	public class JSONFetcher extends AsyncTask<String, Void, String>
+	{
+		// Return a String to pass into onPostExecute
+		// This method handles the HttpURLConnection, response code, and input stream
+		@Override
+		protected String doInBackground(String... artist) 
+		{
+			// Declare our JSON text
+			String JSONString = "";
+			int responseCode = 0;
+			
+			// Any HTTP connection related code must be in a try/catch
+			try
+			{
+				// Declare the URL string, integrate artist name
+				String urlString = "http://ws.audioscrobbler.com/2.0/" + 
+						   "?method=artist.getSimilar" + 
+						   "&limit=20" + 
+						   "&artist=" + artist +
+						   "&autocorrect=1" +
+						   "&api_key=58384a2141a4b9737eacb9d0989b8a8c" + 
+						   "&format=json";
+				
+				//String urlString = "http://ws.audioscrobbler.com/2.0/" + 
+				//				   "?method=chart.getTopArtists" + 
+				//				   "&api_key=58384a2141a4b9737eacb9d0989b8a8c" + 
+				//				   "&limit=20" + 
+				//				   "&format=json";
+				
+				// Convert the URL string to URLObject
+				URL urlObject = new URL(urlString);
+				
+				// Create an HttpURLConnection object using urlObject's openConnection command.
+				HttpURLConnection connection = (HttpURLConnection) urlObject.openConnection();
+				
+				// Send the URL
+				connection.connect();
+				
+				// Get the response code, proceed only if it's 200
+				responseCode = connection.getResponseCode();
+				
+				if(responseCode == 200)
+				{
+					// Get an InputStream from our HttpURLConnection object and set up a BufferedReader
+					InputStream inputStream = connection.getInputStream();
+					InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+					BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+					
+					// Read the entire input
+					String responseString;
+					StringBuilder stringBuilder = new StringBuilder();
+					
+					// Loop until the end of the input
+					while ((responseString = bufferedReader.readLine()) != null)
+					{
+						// Append the line
+						stringBuilder = stringBuilder.append(responseString);
+					}
+					
+					// Get the string from the stringBuilder
+					JSONString = stringBuilder.toString();
+					
+				}
+				else
+				{
+					// Something went wrong
+					Toast.makeText(WebServicesActivity.this, "Error! Response code: " + responseCode, Toast.LENGTH_LONG).show();
+				}
+			}
+			catch (Exception ex)
+			{	
+				ex.printStackTrace();
+			}
+			
+			return JSONString;
+		}
+		
+		// Accepts the fetched string of data
+		// Parse the string and extract the data we want.
+		// Fire the data off to a ListView.
+		@Override
+		protected void onPostExecute(String fetchedString)
+		{
+			try 
+			{				
+				// Create the JSONObject using the fetched string.
+				JSONObject artistData = new JSONObject(fetchedString);
+				
+				// Get the value part of the main Key-Value pair (the object that holds the array that we want)
+				JSONObject mainArtistsObject = artistData.getJSONObject("artists");
+				
+				// Get the array of artists
+				JSONArray rawArtistArray = mainArtistsObject.getJSONArray("artist");
+				
+				// Create an ArrayList of type 'ArtistInfo' to store the artist names and listeners counts.
+				ArrayList<ArtistInfo> artists = new ArrayList<ArtistInfo>();
+				
+				// Loop over our Array of raw JSON event information to get the names and listener count.
+				for (int i = 0; i < rawArtistArray.length(); i++)
+				{
+					// Get the raw artist object
+					JSONObject rawArtist = rawArtistArray.getJSONObject(i);	
+					
+					// Get the artist's name
+					String name = rawArtist.getString("name");
+					
+					// Get the artist's listener count
+					String listeners = rawArtist.getString("listeners");
+					
+					// Add to our list of artists
+					ArtistInfo artist = new ArtistInfo(name, listeners);
+					artists.add(artist);
+					
+				}
+				
+				// Make custom adapter
+				ArtistInfoArrayAdapter artistArrayAdapter = new ArtistInfoArrayAdapter(WebServicesActivity.this, 
+						R.layout.top_artist_list_item, artists);
+				
+				// Set the ListView's adapter
+				lvArtists.setAdapter(artistArrayAdapter);
+				
+			} 
+			catch (JSONException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	// This class in an extension of ArrayAdapter who's purpose is to
+	// return a layout with two TextViews
+	public class ArtistInfoArrayAdapter extends ArrayAdapter<ArtistInfo>
+	{
+
+		public ArtistInfoArrayAdapter(Context context, int resource, ArrayList<ArtistInfo> objects) 
+		{
+			super(context, resource, objects);
+		}
+
+		// Override the getView method
+		@Override
+		public View getView(int position, View convertView, ViewGroup container)
+		{
+			// Get a LayoutInflater
+			LayoutInflater inflater = LayoutInflater.from(WebServicesActivity.this);
+			
+			// Inflate top_artist_list_item and store the returned View in a variable
+			View customView = inflater.inflate(R.layout.top_artist_list_item, container, false);
+			
+			// Get references to the controls in custom_list_view.
+			TextView txtArtistName = (TextView)customView.findViewById(R.id.txtArtistName);
+			TextView txtListenerCount = (TextView)customView.findViewById(R.id.txtListenerCount);
+			
+			// Get the current Artist instance. Use the Adapter base class's getItem command
+			ArtistInfo artistItem = getItem(position);
+			
+			// Use the data fields of the current ArtistInfo instance to initialize the View controls correctly
+			String theName = artistItem.artistName;
+			String theListeners = artistItem.artistListeners;
+			
+			// Set the text properties of the TexViews
+			txtArtistName.setText(theName);
+			txtListenerCount.setText(theListeners);
+			
+			// Return our custom view
+			return customView;
+		}
+
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.web_services, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+}
